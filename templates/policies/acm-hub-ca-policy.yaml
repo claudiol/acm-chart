@@ -7,7 +7,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: acm-hub-ca-{{ .name }}-policy
+  name: {{ .name }}-acm-hub-ca-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -19,7 +19,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: acm-hub-ca-config-{{ .name }}-policy
+          name: {{ .name }}-acm-hub-ca-config-policy
         spec:
           remediationAction: enforce
           severity: medium
@@ -54,22 +54,22 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: acm-hub-ca-policy-placement-{{ .name }}-binding
+  name: {{ .name }}-acm-hub-ca-policy-placement-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: acm-hub-ca-policy-{{ .name }}-placement
+  name: {{ .name }}-acm-hub-ca-policy-placement
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: acm-hub-ca-{{ .name }}-policy
+  - name: {{ .name }}-acm-hub-ca-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: acm-hub-ca-policy-{{ .name }}-placement
+  name: {{ .name }}-acm-hub-ca-policy-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
@@ -106,7 +106,7 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: hub-argo-ca-openshift-gitops-{{ .name }}-policy
+  name: {{ .name }}-hub-argo-ca-openshift-gitops-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -118,7 +118,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: hub-argo-ca-openshift-gitops-{{ .name }}-config
+          name: {{ .name }}-hub-argo-ca-openshift-gitops-config
         spec:
           remediationAction: enforce
           severity: medium
@@ -142,22 +142,22 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: hub-argo-ca-openshift-gitops-policy-{{ .name }}-binding
+  name: {{ .name }}-hub-argo-ca-openshift-gitops-policy-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: hub-argo-ca-openshift-gitops-policy-{{ .name }}-placement
+  name: {{ .name }}-hub-argo-ca-openshift-gitops-policy-placement
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: hub-argo-ca-openshift-gitops-{{ .name }}-policy
+  - name: {{ .name }}-hub-argo-ca-openshift-gitops-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: hub-argo-ca-openshift-gitops-policy-{{ .name }}-placement
+  name: {{ .name }}-hub-argo-ca-openshift-gitops-policy-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
@@ -198,7 +198,7 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: hub-argo-ca-{{ .name }}-policy
+  name: {{ .name }}-hub-argo-ca-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -210,7 +210,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: hub-argo-ca-{{ .name }}-config
+          name: {{ .name }}-hub-argo-ca-config
         spec:
           remediationAction: enforce
           severity: medium
@@ -234,22 +234,22 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: hub-argo-ca-{{ .name }}-placement-binding
+  name: {{ .name }}-hub-argo-ca-placement-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: hub-argo-ca-{{ .name }}-placement
+  name: {{ .name }}-hub-argo-ca-placement
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: hub-argo-ca-{{ .name }}-policy
+  - name: {{ .nanme }}-hub-argo-ca-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: hub-argo-ca-{{ .name }}-placement
+  name: {{ .name }}-hub-argo-ca-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:

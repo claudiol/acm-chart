@@ -13,7 +13,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: private-hub-{{ .name }}-policy
+  name: {{ .name }}-private-hub-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -25,7 +25,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: private-hub-{{ .name }}-config
+          name: {{ .name }}-private-hub-config
         spec:
           remediationAction: enforce
           severity: medium
@@ -48,7 +48,7 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: private-hub-placement-{{ .name }}-binding
+  name: {{ .name }}-private-hub-placement-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
@@ -56,14 +56,14 @@ placementRef:
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: private-hub-{{ .name }}-policy
+  - name: {{ .name }}-private-hub-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: private-hub-{{ .name }}-placement
+  name: {{ .name }}-private-hub-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
@@ -101,7 +101,7 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: private-{{ .name }}-policy
+  name: {{ .name }}-private-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -113,7 +113,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: private-{{ .name }}-config
+          name: {{ .name }}-private-config
         spec:
           remediationAction: enforce
           severity: medium
@@ -147,22 +147,22 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: private-{{ .name }}-placement-binding
+  name: {{ .name }}-private-placement-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: private-{{ .name }}-placement
+  name: {{ .name }}-private-placement
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: private-{{ .name }}-policy
+  - name: {{ .name }}-private-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: private-{{ .name }}-placement
+  name: {{ .name }}-private-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:

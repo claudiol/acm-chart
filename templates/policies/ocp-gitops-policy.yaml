@@ -5,7 +5,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: openshift-gitops-{{ .name }}-policy
+  name: {{ .name }}-openshift-gitops-policy
   annotations:
     policy.open-cluster-management.io/standards: NIST-CSF
     policy.open-cluster-management.io/categories: PR.DS Data Security
@@ -20,7 +20,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: openshift-gitops-{{ .name }}-config
+          name: {{ .name }}-openshift-gitops-config
         spec:
           remediationAction: enforce
           severity: medium
@@ -61,22 +61,22 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: openshift-gitops-placement-{{ .name }}-binding
+  name: {{ .name }}-openshift-gitops-placement-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: openshift-gitops-{{ .name }}-placement
+  name: {{ .name }}-openshift-gitops-placement
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: openshift-gitops-{{ .name }}-policy
+  - name: {{ .name }}-openshift-gitops-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: openshift-gitops-{{ .name }}-placement
+  name: {{ .name }}-openshift-gitops-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
@@ -117,7 +117,7 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: openshift-gitops-{{ .name }}-policy-argocd
+  name: {{ .name }}-openshift-gitops-policy-argocd
   annotations:
     policy.open-cluster-management.io/standards: NIST-CSF
     policy.open-cluster-management.io/categories: PR.DS Data Security
@@ -131,19 +131,19 @@ spec:
     - apiVersion: policy.open-cluster-management.io/v1
       compliance: Compliant
       kind: Policy
-      name: openshift-gitops-{{ .name }}-policy
+      name: {{ .name }}-openshift-gitops-policy
       namespace: open-cluster-management
     - apiVersion: policy.open-cluster-management.io/v1
       compliance: Compliant
       kind: Policy
-      name: hub-argo-ca-openshift-gitops-{{ .name }}-policy
+      name: {{ .name }}-hub-argo-ca-openshift-gitops-policy
       namespace: open-cluster-management
   policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: openshift-gitops-config-{{ .name }}-argocd
+          name: {{ .name }}-openshift-gitops-config-argocd
         spec:
           remediationAction: enforce
           severity: medium
@@ -322,22 +322,22 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: openshift-gitops-placement-{{ .name }}-binding-argocd
+  name: {{ .name }}-openshift-gitops-placement-binding-argocd
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: openshift-gitops-placement-{{ .name }}-argocd
+  name: {{ .name }}-openshift-gitops-placement-argocd
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: openshift-gitops-policy-{{ .name }}-argocd
+  - name: {{ .name }}-openshift-gitops-policy-argocd
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: openshift-gitops-placement-{{ .name }}-argocd
+  name: {{ .name }}-openshift-gitops-placement-argocd
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
