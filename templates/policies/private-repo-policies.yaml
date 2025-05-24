@@ -7,11 +7,13 @@
 # And we also copy the same secret to the namespaced argo's namespace
 {{ if $.Values.global.privateRepo }}
 {{ if .Values.clusterGroup.isHubCluster }}
+{{- range .Values.clusterGroup.managedClusterGroups }}
+{{- $group := . }}
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: private-hub-policy
+  name: private-hub-{{ .name }}-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -23,7 +25,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: private-hub-config
+          name: private-hub-{{ .name }}-config
         spec:
           remediationAction: enforce
           severity: medium
@@ -46,7 +48,7 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: private-hub-placement-binding
+  name: private-hub-placement-{{ .name }}-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
@@ -54,14 +56,14 @@ placementRef:
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: private-hub-policy
+  - name: private-hub-{{ .name }}-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: private-hub-placement
+  name: private-hub-{{ .name }}-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
@@ -69,12 +71,30 @@ spec:
     - status: 'True'
       type: ManagedClusterConditionAvailable
   clusterSelector:
+  {{- if .clusterSelector }}
+  clusterSelector: {{ .clusterSelector | toPrettyJson }}
+  {{- else if (not $group.acmlabels) }}
+  clusterSelector:
+    matchLabels:
+      clusterGroup: {{ $group.name }}
+  {{- else if eq (len $group.acmlabels) 0 }}
+  clusterSelector:
+    matchLabels:
+      clusterGroup: {{ $group.name }}
+  {{- else }}
+  clusterSelector:
+    matchLabels:
+    {{- range .acmlabels }}
+      {{ .name }}: {{ .value }}
+    {{- end }}
+  {{- end }}
     matchExpressions:
       - key: local-cluster
         operator: In
         values:
           - 'true'
 ---
+{{- end }}{{- /* range .Values.clusterGroup.managedClusterGroups */}}
 {{ end }}{{- /* if .Values.clusterGroup.isHubCluster */}}
 {{- range .Values.clusterGroup.managedClusterGroups }}
 {{- $group := . }}
@@ -149,7 +169,23 @@ spec:
   clusterConditions:
     - status: 'True'
       type: ManagedClusterConditionAvailable
+  {{- if .clusterSelector }}
+  clusterSelector: {{ .clusterSelector | toPrettyJson }}
+  {{- else if (not $group.acmlabels) }}
   clusterSelector:
+    matchLabels:
+      clusterGroup: {{ $group.name }}
+  {{- else if eq (len $group.acmlabels) 0 }}
+  clusterSelector:
+    matchLabels:
+      clusterGroup: {{ $group.name }}
+  {{- else }}
+  clusterSelector:
+    matchLabels:
+    {{- range .acmlabels }}
+      {{ .name }}: {{ .value }}
+    {{- end }}
+  {{- end }}
     matchExpressions:
       - key: local-cluster
         operator: NotIn
