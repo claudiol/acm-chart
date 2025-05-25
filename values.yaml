@@ -103,3 +103,17 @@ clusterGroup:
 #          operator: In
 #          values:
 #            - OpenShift
+acm:
+  # -- Just used for IIB testing, drives the source and channel for the MCE subscription triggered by ACM
+  # @default -- Uses the official redhat sources
+  mce_operator:
+    source: redhat-operators
+    channel: null
+
+
+# -- Default secretstore configuration variables
+# @default -- depends on the individual settings
+secretStore:
+  # -- Name of the clustersecretstore to be used for secrets
+  name: vault-backend
+  kind: ClusterSecretStore
