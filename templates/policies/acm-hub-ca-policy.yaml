@@ -1,13 +1,11 @@
 # This pushes out the HUB's Certificate Authorities on to the imported clusters
 {{- if .Values.clusterGroup.isHubCluster }}
 {{- if (eq (((.Values.global).secretStore).backend) "vault") }}
-{{- range .Values.clusterGroup.managedClusterGroups }}
-{{- $group := . }}
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: {{ .name }}-acm-hub-ca-policy
+  name: acm-hub-ca-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -19,7 +17,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: {{ .name }}-acm-hub-ca-config-policy
+          name: acm-hub-ca-config-policy
         spec:
           remediationAction: enforce
           severity: medium
@@ -54,59 +52,39 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: {{ .name }}-acm-hub-ca-policy-placement-binding
+  name: acm-hub-ca-policy-placement-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: {{ .name }}-acm-hub-ca-policy-placement
+  name: acm-hub-ca-policy-placement
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: {{ .name }}-acm-hub-ca-policy
+  - name: acm-hub-ca-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: {{ .name }}-acm-hub-ca-policy-placement
+  name: acm-hub-ca-policy-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   clusterConditions:
     - status: 'True'
       type: ManagedClusterConditionAvailable
-  {{- if .clusterSelector }}
-  clusterSelector: {{ .clusterSelector | toPrettyJson }}
-  {{- else if (not $group.acmlabels) }}
   clusterSelector:
-    matchLabels:
-      clusterGroup: {{ $group.name }}
-  {{- else if eq (len $group.acmlabels) 0 }}
-  clusterSelector:
-    matchLabels:
-      clusterGroup: {{ $group.name }}
-  {{- else }}
-  clusterSelector:
-    matchLabels:
-    {{- range .acmlabels }}
-      {{ .name }}: {{ .value }}
-    {{- end }}
-  {{- end }}
     matchExpressions:
-     - key: vendor
-       operator: In
-       values:
-       - OpenShift
-     - key: local-cluster
-       operator: NotIn
-       values:
-        - "true"
+      - key: local-cluster
+        operator: NotIn
+        values:
+          - 'true'
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: {{ .name }}-hub-argo-ca-openshift-gitops-policy
+  name: hub-argo-ca-openshift-gitops-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -118,7 +96,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: {{ .name }}-hub-argo-ca-openshift-gitops-config
+          name: hub-argo-ca-openshift-gitops-config
         spec:
           remediationAction: enforce
           severity: medium
@@ -142,55 +120,35 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: {{ .name }}-hub-argo-ca-openshift-gitops-policy-binding
+  name: hub-argo-ca-openshift-gitops-policy-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: {{ .name }}-hub-argo-ca-openshift-gitops-policy-placement
+  name: hub-argo-ca-openshift-gitops-policy-placement
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: {{ .name }}-hub-argo-ca-openshift-gitops-policy
+  - name: hub-argo-ca-openshift-gitops-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: {{ .name }}-hub-argo-ca-openshift-gitops-policy-placement
+  name: hub-argo-ca-openshift-gitops-policy-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   clusterConditions:
     - status: 'True'
       type: ManagedClusterConditionAvailable
-  {{- if .clusterSelector }}
-  clusterSelector: {{ .clusterSelector | toPrettyJson }}
-  {{- else if (not $group.acmlabels) }}
   clusterSelector:
-    matchLabels:
-      clusterGroup: {{ $group.name }}
-  {{- else if eq (len $group.acmlabels) 0 }}
-  clusterSelector:
-    matchLabels:
-      clusterGroup: {{ $group.name }}
-  {{- else }}
-  clusterSelector:
-    matchLabels:
-    {{- range .acmlabels }}
-      {{ .name }}: {{ .value }}
-    {{- end }}
-  {{- end }}
     matchExpressions:
-     - key: vendor
-       operator: In
-       values:
-       - OpenShift
-     - key: local-cluster
-       operator: NotIn
-       values:
-        - "true"
-{{- end }}{{/* range .Values.clusterGroup.managedClusterGroups */}}
+      - key: local-cluster
+        operator: NotIn
+        values:
+          - 'true'
+
 {{- end }}{{/* if (eq (((.Values.global).secretStore).backend) "vault") */}}
 {{- range .Values.clusterGroup.managedClusterGroups }}
 {{- $group := . }}
@@ -198,7 +156,7 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: {{ .name }}-hub-argo-ca-policy
+  name: hub-argo-ca-{{ .name }}-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -210,7 +168,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: {{ .name }}-hub-argo-ca-config
+          name: hub-argo-ca-{{ .name }}-config
         spec:
           remediationAction: enforce
           severity: medium
@@ -234,22 +192,22 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: {{ .name }}-hub-argo-ca-placement-binding
+  name: hub-argo-ca-{{ .name }}-placement-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: {{ .name }}-hub-argo-ca-placement
+  name: hub-argo-ca-{{ .name }}-placement
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: {{ .nanme }}-hub-argo-ca-policy
+  - name: hub-argo-ca-{{ .name }}-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: {{ .name }}-hub-argo-ca-placement
+  name: hub-argo-ca-{{ .name }}-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
@@ -274,13 +232,9 @@ spec:
     {{- end }}
   {{- end }}
     matchExpressions:
-     - key: vendor
-       operator: In
-       values:
-       - OpenShift
-     - key: local-cluster
-       operator: NotIn
-       values:
-        - "true"
+      - key: local-cluster
+        operator: NotIn
+        values:
+          - 'true'
 {{- end }}{{/* range .Values.clusterGroup.managedClusterGroups */}}
 {{- end }}{{/* isHubCluster */}}
