@@ -190,10 +190,10 @@ spec:
        operator: NotIn
        values:
         - "true"
-#{{- end }}{{/* range .Values.clusterGroup.managedClusterGroups */}}
+{{- end }}{{/* range .Values.clusterGroup.managedClusterGroups */}}
 {{- end }}{{/* if (eq (((.Values.global).secretStore).backend) "vault") */}}
-#{{- range .Values.clusterGroup.managedClusterGroups }}
-#{{- $group := . }}
+{{- range .Values.clusterGroup.managedClusterGroups }}
+{{- $group := . }}
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
