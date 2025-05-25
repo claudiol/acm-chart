@@ -1,3 +1,21 @@
+main:
+  gitops:
+    # -- Default gitops channel to install on remote clusters
+    channel: "gitops-1.15"
+
+global:
+  # -- List of additional value files to be passed to the pattern
+  extraValueFiles: []
+  pattern: none
+  # -- Repository URL pointing to the pattern
+  repoURL: none
+    # -- The branch or Git reference to use to deploy the pattern
+  targetRevision: main
+  options:
+    applicationRetryLimit: 20
+  secretStore:
+    backend: "vault"
+
 clusterGroup:
   name: hub
   isHubCluster: true
