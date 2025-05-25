@@ -21,7 +21,7 @@ clusterGroup:
   isHubCluster: true
   managedClusterGroups:
     exampleRegion:
-      name: cloud-services
+      name: cloudsvc
       acmlabels:
         - name: clusterGroup
           value: cloud-services
