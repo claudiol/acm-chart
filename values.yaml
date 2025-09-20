@@ -26,7 +26,15 @@ clusterGroup:
       # -- The catalog source for this subscription
       source: redhat-operators
   # -- The set of cluters managed by ACM which is running inside this clusterGroup
-  managedClusterGroups: {}
+  managedClusterGroups:
+    exampleRegion:
+      name: cloud-services
+      acmlabels:
+        - name: clusterGroup
+          value: cloud-services
+      helmOverrides:
+        - name: clusterGroup.isHubCluster
+          value: false
 #    testRegion:
 #      name: region-one
 #      clusterPools:
