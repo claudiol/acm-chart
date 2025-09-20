@@ -28,10 +28,10 @@ clusterGroup:
   # -- The set of cluters managed by ACM which is running inside this clusterGroup
   managedClusterGroups:
     exampleRegion:
-      name: cloud-services
+      name: cloud-svcs
       acmlabels:
         - name: clusterGroup
-          value: cloud-services
+          value: cloud-svcs
       helmOverrides:
         - name: clusterGroup.isHubCluster
           value: false
