@@ -19,6 +19,8 @@ global:
 # -- Dictionary of all the clustergroups of the pattern
 # @default -- depends on the individual settings
 clusterGroup:
+  name: hub
+  isHubCluster: true
   # -- Dictionary of subscriptions for this specific clusterGroup
   subscriptions:
     # -- Name of the subscription
