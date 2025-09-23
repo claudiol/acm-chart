@@ -37,6 +37,14 @@ clusterGroup:
       helmOverrides:
         - name: clusterGroup.isHubCluster
           value: false
+    rhoso:
+      name: rhoso
+      acmlabels:
+        - name: clusterGroup
+          value: rhoso
+      helmOverrides:
+        - name: clusterGroup.isHubCluster
+          value: false
 #    testRegion:
 #      name: region-one
 #      clusterPools:
