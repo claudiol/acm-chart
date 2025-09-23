@@ -92,13 +92,13 @@ spec:
     {{- range .acmlabels }}
       {{ .name }}: {{ .value }}
     {{- end }}
-  {{- end }}
-{{- end }}
     matchExpressions:
       - key: local-cluster
         operator: NotIn
         values:
           - 'true'
+  {{- end }}
+{{- end }}
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
@@ -179,13 +179,13 @@ spec:
     {{- range .acmlabels }}
       {{ .name }}: {{ .value }}
     {{- end }}
-  {{- end }}
-{{- end }}
     matchExpressions:
       - key: local-cluster
         operator: NotIn
         values:
           - 'true'
+  {{- end }}
+{{- end }}
 
 {{- end }}{{/* if (eq (((.Values.global).secretStore).backend) "vault") */}}
 {{- range .Values.clusterGroup.managedClusterGroups }}
@@ -268,11 +268,11 @@ spec:
     {{- range .acmlabels }}
       {{ .name }}: {{ .value }}
     {{- end }}
-  {{- end }}
     matchExpressions:
       - key: local-cluster
         operator: NotIn
         values:
           - 'true'
+  {{- end }}
 {{- end }}{{/* range .Values.clusterGroup.managedClusterGroups */}}
 {{- end }}{{/* isHubCluster */}}
