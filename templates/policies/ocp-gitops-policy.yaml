@@ -360,7 +360,6 @@ spec:
     {{- range .acmlabels }}
       {{ .name }}: {{ .value }}
     {{- end }}
-  {{- end }}
     matchExpressions:
      - key: vendor
        operator: In
@@ -370,4 +369,5 @@ spec:
        operator: NotIn
        values:
         - "true"
+  {{- end }}
 {{- end }}{{/* range .Values.clusterGroup.managedClusterGroups */}}
