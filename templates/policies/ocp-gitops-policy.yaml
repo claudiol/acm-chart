@@ -137,7 +137,8 @@ spec:
     - apiVersion: policy.open-cluster-management.io/v1
       compliance: Compliant
       kind: Policy
-      name: hub-argo-ca-openshift-gitops-policy
+      #name: hub-argo-ca-openshift-gitops-policy
+      name: {{ $group.name }}-hub-argo-ca-ocp-gitops-policy
       namespace: open-cluster-management
   policy-templates:
     - objectDefinition:
