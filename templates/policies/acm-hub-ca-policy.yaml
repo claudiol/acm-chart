@@ -1,11 +1,13 @@
 # This pushes out the HUB's Certificate Authorities on to the imported clusters
 {{- if .Values.clusterGroup.isHubCluster }}
 {{- if (eq (((.Values.global).secretStore).backend) "vault") }}
+{{- range .Values.clusterGroup.managedClusterGroups }}
+{{- $group := . }}
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: acm-hub-ca-policy
+  name: {{ $group.name }}-acm-hub-ca-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -17,7 +19,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: acm-hub-ca-config-policy
+          name: {{ $group.name }}-acm-hub-ca-config-policy
         spec:
           remediationAction: enforce
           severity: medium
@@ -52,30 +54,28 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: acm-hub-ca-policy-placement-binding
+  name: {{ $group.name }}-acm-hub-ca-policy-placement-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: acm-hub-ca-policy-placement
+  name: {{ $group.name }}-acm-hub-ca-policy-placement
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: acm-hub-ca-policy
+  - name: {{ $group.name }}-acm-hub-ca-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: acm-hub-ca-policy-placement
+  name: {{ $group.name }}-acm-hub-ca-policy-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   clusterConditions:
     - status: 'True'
       type: ManagedClusterConditionAvailable
-{{- range .Values.clusterGroup.managedClusterGroups }}
-{{- $group := . }}
   {{- if .clusterSelector }}
   clusterSelector: {{ .clusterSelector | toPrettyJson }}
   {{- else if (not $group.acmlabels) }}
@@ -97,13 +97,11 @@ spec:
         operator: NotIn
         values:
           - 'true'
-  {{- end }}
-{{- end }}
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: hub-argo-ca-openshift-gitops-policy
+  name: {{ $group.name }}-hub-argo-ca-openshift-gitops-policy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -115,7 +113,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: hub-argo-ca-openshift-gitops-config
+          name: {{ $group.name }}-hub-argo-ca-openshift-gitops-config
         spec:
           remediationAction: enforce
           severity: medium
@@ -139,30 +137,28 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: hub-argo-ca-openshift-gitops-policy-binding
+  name: {{ $group.name }}-hub-argo-ca-openshift-gitops-policy-binding
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 placementRef:
-  name: hub-argo-ca-openshift-gitops-policy-placement
+  name: {{ $group.name }}-hub-argo-ca-openshift-gitops-policy-placement
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: hub-argo-ca-openshift-gitops-policy
+  - name: {{ $group.name }}-hub-argo-ca-openshift-gitops-policy
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: hub-argo-ca-openshift-gitops-policy-placement
+  name: {{ $group.name }}-hub-argo-ca-openshift-gitops-policy-placement
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   clusterConditions:
     - status: 'True'
       type: ManagedClusterConditionAvailable
-{{- range .Values.clusterGroup.managedClusterGroups }}
-{{- $group := . }}
   {{- if .clusterSelector }}
   clusterSelector: {{ .clusterSelector | toPrettyJson }}
   {{- else if (not $group.acmlabels) }}
@@ -186,7 +182,7 @@ spec:
           - 'true'
   {{- end }}
 {{- end }}
-
+{{- end }}
 {{- end }}{{/* if (eq (((.Values.global).secretStore).backend) "vault") */}}
 {{- range .Values.clusterGroup.managedClusterGroups }}
 {{- $group := . }}
