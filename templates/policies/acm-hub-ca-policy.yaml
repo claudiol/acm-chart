@@ -97,6 +97,7 @@ spec:
         operator: NotIn
         values:
           - 'true'
+  {{- end }}
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
@@ -181,7 +182,6 @@ spec:
         values:
           - 'true'
   {{- end }}
-{{- end }}
 {{- end }}
 {{- end }}{{/* if (eq (((.Values.global).secretStore).backend) "vault") */}}
 {{- range .Values.clusterGroup.managedClusterGroups }}
